@@ -15,18 +15,21 @@ steps:
   displayName: 'Run a one-line script'
 
 - task: DotNetCoreCLI@2
+  displayName: 'Restore'
   inputs:
     command: 'restore'
     projects: '$(solution)'
     feedsToUse: 'select'
 
 - task: DotNetCoreCLI@2
+  displayName: 'Build'
   inputs:
     command: 'build'
     projects: '$(solution)'
     arguments: '--configuration Release'
 
 - task: DotNetCoreCLI@2
+  displayName: 'Publish'
   inputs:
     command: 'publish'
     publishWebProjects: true
@@ -34,6 +37,7 @@ steps:
     zipAfterPublish: false
 
 - task: PublishBuildArtifacts@1
+  displayName: 'Drop'
   inputs:
     PathtoPublish: '$(Build.ArtifactStagingDirectory)'
     ArtifactName: 'drop'
