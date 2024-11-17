@@ -9,6 +9,14 @@ namespace HelloWorldApp
             // Add services to the container.
             builder.Services.AddControllersWithViews();
 
+            builder.Services.AddCors(options =>
+            {
+                options.AddPolicy("AllowAll", builder =>
+                    builder.AllowAnyOrigin()
+                           .AllowAnyMethod()
+                           .AllowAnyHeader());
+            });
+
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
@@ -20,7 +28,12 @@ namespace HelloWorldApp
             }
 
             app.UseHttpsRedirection();
+
+            app.UseCors("AllowAll");
+
             app.UseStaticFiles();
+            
+            app.MapFallbackToFile("index.html");
 
             app.UseRouting();
 
