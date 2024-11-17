@@ -4,6 +4,12 @@ trigger:
 pool:
   vmImage: ubuntu-latest
 
+variables:
+  buildPlatform: 'Any CPU'
+  buildConfiguration: 'release'
+  solution: '**/HelloWorldApp.sln'
+  project: '**/HelloWorldApp.csproj'
+
 steps:
 - script: echo Hello, world!
   displayName: 'Run a one-line script'
@@ -11,13 +17,13 @@ steps:
 - task: DotNetCoreCLI@2
   inputs:
     command: 'restore'
-    projects: '.\HelloWorldApp\HelloWorldApp\HelloWorldApp.csproj'
+    projects: '$(solution)'
     feedsToUse: 'select'
 
 - task: DotNetCoreCLI@2
   inputs:
     command: 'build'
-    projects: '.\HelloWorldApp\HelloWorldApp\HelloWorldApp.csproj'
+    projects: '$(solution)'
     arguments: '--configuration Release'
 
 - task: DotNetCoreCLI@2
