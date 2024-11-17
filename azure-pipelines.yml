@@ -6,7 +6,7 @@ pool:
 
 variables:
   buildPlatform: 'Any CPU'
-  buildConfiguration: 'release'
+  buildConfiguration: 'Release'
   solution: '**/HelloWorldApp.sln'
   project: '**/HelloWorldApp.csproj'
 
@@ -31,9 +31,11 @@ steps:
 - task: DotNetCoreCLI@2
   displayName: 'Publish'
   inputs:
+    azureSubscription: 'alexeisubscription (af783b88-9530-433e-9520-32a8accf75a5)'
     command: 'publish'
-    publishWebProjects: true
-    arguments: '--configuration Release --output drop'
+    publishWebProjects: false
+    projects: '$(project)'
+    arguments: '--configuration $(buildConfiguration) --output $(Build.ArtifactStagingDirectory)'
     zipAfterPublish: false
 
 - task: PublishBuildArtifacts@1
