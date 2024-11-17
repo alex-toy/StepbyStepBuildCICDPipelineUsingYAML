@@ -1,0 +1,15 @@
+trigger:
+- main
+
+pool:
+  vmImage: ubuntu-latest
+
+steps:
+- script: echo Hello, world!
+  displayName: 'Run a one-line script'
+
+- task: DotNetCoreCLI@2
+  inputs:
+    command: 'restore'
+    projects: '.\HelloWorldApp\HelloWorldApp\'
+    feedsToUse: 'select'
