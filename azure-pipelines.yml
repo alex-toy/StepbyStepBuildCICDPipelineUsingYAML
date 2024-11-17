@@ -11,13 +11,13 @@ steps:
 - task: DotNetCoreCLI@2
   inputs:
     command: 'restore'
-    projects: '.\HelloWorldApp\HelloWorldApp\'
+    projects: '.\HelloWorldApp\HelloWorldApp\HelloWorldApp.csproj'
     feedsToUse: 'select'
 
 - task: DotNetCoreCLI@2
   inputs:
     command: 'build'
-    projects: '.\HelloWorldApp\HelloWorldApp\'
+    projects: '.\HelloWorldApp\HelloWorldApp\HelloWorldApp.csproj'
     arguments: '--configuration Release'
 
 - task: DotNetCoreCLI@2
