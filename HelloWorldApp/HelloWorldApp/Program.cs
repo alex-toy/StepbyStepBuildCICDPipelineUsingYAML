@@ -1,3 +1,5 @@
+using Newtonsoft.Json.Serialization;
+
 namespace HelloWorldApp
 {
     public class Program
@@ -6,8 +8,18 @@ namespace HelloWorldApp
         {
             var builder = WebApplication.CreateBuilder(args);
 
+            builder.ConfigureDatabase();
+
             // Add services to the container.
             builder.Services.AddControllersWithViews();
+
+            builder.Services.AddControllers()
+                .AddNewtonsoftJson(options =>
+                {
+                    options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore;
+                    options.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
+
+                });
 
             builder.Services.AddCors(options =>
             {
