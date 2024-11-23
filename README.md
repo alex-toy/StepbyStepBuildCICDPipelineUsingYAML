@@ -23,3 +23,10 @@ dotnet publish HelloWorldApp.csproj --configuration Release --output drop
 ```
 dotnet drop\HelloWorldApp.dll
 ```
+
+## Configure Frontend
+```
+cd wwwroot
+rm main.js ; rm polyfills.js ; rm runtime.js ; rm styles.css ; cp -r ../frontend/dist/frontend/* .
+mv main.*.js main.js ; mv polyfills.*.js polyfills.js ; mv runtime.*.js runtime.js ; mv styles.*.css styles.css
+```
