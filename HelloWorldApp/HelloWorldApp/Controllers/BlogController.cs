@@ -24,13 +24,12 @@ public class BlogController : ControllerBase
         return blogs;
     }
 
-    [HttpPost("blogs")]
-    public void Add(int blogId, string title, string content)
+    [HttpPost("blog")]
+    public void Add([FromBody] Blog blog)
     {
         try
         {
-            Post newPost = new () { BlogId = blogId, Title = title, Content = content };
-            _db.Posts.Add(newPost);
+            _db.Blogs.Add(blog);
             _db.SaveChanges();
         }
         catch (System.Exception ex)
@@ -40,17 +39,53 @@ public class BlogController : ControllerBase
         }
     }
 
-    [HttpPut("blogs")]
-    public void Update(int postId, string title, string content)
+    [HttpPost("post")]
+    public void Add([FromBody] Post post)
     {
         try
         {
-            Post? post = _db.Posts.FirstOrDefault(p => p.Id == postId);
+            _db.Posts.Add(post);
+            _db.SaveChanges();
+        }
+        catch (System.Exception ex)
+        {
+            Console.WriteLine($"An error occurred while adding a post: {ex.Message}");
+            throw;
+        }
+    }
+
+    [HttpPut("blog")]
+    public void Update([FromBody] Blog updatedBlog)
+    {
+        try
+        {
+            Blog? blog = _db.Blogs.FirstOrDefault(p => p.Id == updatedBlog.Id);
+
+            if (blog is null) return;
+
+            blog.Name = updatedBlog.Name;
+            blog.Url = updatedBlog.Url;
+
+            _db.SaveChanges();
+        }
+        catch (System.Exception ex)
+        {
+            Console.WriteLine($"An error occurred while updating a post: {ex.Message}");
+            throw;
+        }
+    }
+
+    [HttpPut("post")]
+    public void Update([FromBody] Post updatedPost)
+    {
+        try
+        {
+            Post? post = _db.Posts.FirstOrDefault(p => p.Id == updatedPost.Id);
 
             if (post is null) return;
 
-            post.Title = title;
-            post.Content = content;
+            post.Title = updatedPost.Title;
+            post.Content = updatedPost.Content;
 
             _db.SaveChanges();
         }
