@@ -1,3 +1,7 @@
+using BookLibrary;
+using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json.Serialization;
+
 namespace HelloWorldApp
 {
     public class Program
@@ -6,8 +10,18 @@ namespace HelloWorldApp
         {
             var builder = WebApplication.CreateBuilder(args);
 
+            builder.ConfigureDatabase();
+
             // Add services to the container.
             builder.Services.AddControllersWithViews();
+
+            builder.Services.AddControllers()
+                .AddNewtonsoftJson(options =>
+                {
+                    options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore;
+                    options.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
+
+                });
 
             builder.Services.AddCors(options =>
             {
@@ -18,6 +32,13 @@ namespace HelloWorldApp
             });
 
             var app = builder.Build();
+
+            // Apply migrations on startup
+            using (var scope = app.Services.CreateScope())
+            {
+                var dbContext = scope.ServiceProvider.GetRequiredService<BooksContext>();
+                dbContext.Database.Migrate();
+            }
 
             // Configure the HTTP request pipeline.
             if (!app.Environment.IsDevelopment())

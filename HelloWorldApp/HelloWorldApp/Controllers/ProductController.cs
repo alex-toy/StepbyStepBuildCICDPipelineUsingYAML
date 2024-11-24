@@ -1,5 +1,7 @@
-﻿using HelloWorldApp.Models;
+﻿using BookLibrary;
+using HelloWorldApp.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace HelloWorldApp.Controllers;
 
@@ -7,6 +9,13 @@ namespace HelloWorldApp.Controllers;
 [ApiController]
 public class ProductController : ControllerBase
 {
+    private readonly BooksContext _db;
+
+    public ProductController(BooksContext db)
+    {
+        _db = db;
+    }
+
     [HttpGet("GetAll")]
     public IEnumerable<Product> GetAll()
     {
@@ -16,5 +25,13 @@ public class ProductController : ControllerBase
             new Product { Id = 2, Name = "Product 2", Price = 29.99m },
             new Product { Id = 3, Name = "Product 3", Price = 39.99m }
         };
+    }
+
+    [HttpGet("books")]
+    public IEnumerable<Book> GetAllBooks()
+    {
+        List<Book> books = _db.Books.Include(b => b.Author).ToList();
+
+        return books;
     }
 }
