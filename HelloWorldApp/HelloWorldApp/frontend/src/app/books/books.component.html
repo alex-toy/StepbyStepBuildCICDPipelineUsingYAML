@@ -1,0 +1,10 @@
+<div *ngIf="loading">Loading books...</div>
+<div *ngIf="!loading && books.length === 0">No products found.</div>
+
+<ul *ngIf="!loading && books.length > 0">
+  <li *ngFor="let book of books">
+    <strong>{{ book.title }}</strong><br>
+    Author: {{ book.author.name }}
+    Year: {{ book.year }}
+  </li>
+</ul>

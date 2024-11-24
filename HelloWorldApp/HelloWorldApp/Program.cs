@@ -1,3 +1,5 @@
+using BookLibrary;
+using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json.Serialization;
 
 namespace HelloWorldApp
@@ -30,6 +32,13 @@ namespace HelloWorldApp
             });
 
             var app = builder.Build();
+
+            // Apply migrations on startup
+            using (var scope = app.Services.CreateScope())
+            {
+                var dbContext = scope.ServiceProvider.GetRequiredService<BooksContext>();
+                dbContext.Database.Migrate();
+            }
 
             // Configure the HTTP request pipeline.
             if (!app.Environment.IsDevelopment())
