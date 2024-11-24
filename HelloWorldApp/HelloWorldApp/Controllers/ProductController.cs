@@ -1,4 +1,5 @@
 ﻿using BookLibrary;
+using BookLibrary.Models;
 using HelloWorldApp.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;

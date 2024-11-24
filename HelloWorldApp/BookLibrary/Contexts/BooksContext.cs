@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using BookLibrary.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace BookLibrary;
 
