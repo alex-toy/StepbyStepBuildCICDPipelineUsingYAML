@@ -6,5 +6,4 @@ public class Student
     public string Name { get; set; } = string.Empty;
 
     public ICollection<Enrollment>? Enrollments { get; set; }
-    public ICollection<Grade>? Grades { get; set; }
 }

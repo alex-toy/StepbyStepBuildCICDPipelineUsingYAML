@@ -1,6 +1,7 @@
 ﻿using BookLibrary.Contexts;
 using BookLibrary.Models.Students;
 using HelloWorldApp.DTOs;
+using HelloWorldApp.Mappers;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -22,15 +23,13 @@ public class StudentController : ControllerBase
     {
         List<Student> students = _db.Students
                                         .Include(b => b.Enrollments)
-                                        .Include(b => b.Grades)
-                                        .ThenInclude(e => e.Course)
+                                            .ThenInclude(e => e.Course)
                                         .ToList();
 
         return students.Select(s => new StudentDto() { 
             Id = s.Id, 
             Name = s.Name, 
-            Courses = s.Enrollments?.Select(e => new StudentCourseDto() { Id = e.CourseId, Label = e?.Course?.Label ?? string.Empty }).ToList(),
-            Grades = s.Grades?.Select(g => new GradeDto() { Id = g.Id, CourseId = g.CourseId, Course = g.Course?.Label ?? string.Empty }).ToList(),
+            Courses = s.Enrollments?.Select(e => e.ToStudentCourseDto()).ToList()
         });
     }
 
@@ -80,8 +79,38 @@ public class StudentController : ControllerBase
         }
     }
 
+    [HttpPost("grades")]
+    public void AddGrade([FromBody] GradeDto grade)
+    {
+        try
+        {
+            //Course? course = _db.Courses.FirstOrDefault(c => c.Id == grade.CourseId);
+            //Student? student = _db.Students.FirstOrDefault(c => c.Id == grade.StudentId);
+
+            //if (course is null || student is null) return;
+
+            //if (_db.Grades.Any(e => e.StudentId == grade.StudentId && e.EnrollmentId == grade.CourseId))
+            //{
+            //    throw new InvalidOperationException("Student already has a grade in this course.");
+            //}
+
+            Enrollment? enrollment = _db.Enrollments.FirstOrDefault(e => e.Id == grade.EnrollmentId);
+
+            if (enrollment == null) throw new InvalidOperationException("enrollment does not exist.");
+
+            enrollment.Grade = grade.Value;
+
+            _db.SaveChanges();
+        }
+        catch (System.Exception ex)
+        {
+            Console.WriteLine($"An error occurred while enrolling: {ex.Message}");
+            throw;
+        }
+    }
+
     [HttpPost("enroll")]
-    public void Enroll([FromBody] Enrollment enrollment)
+    public void Enroll([FromBody] EnrollmentDto enrollment)
     {
         try
         {
@@ -95,7 +124,7 @@ public class StudentController : ControllerBase
                 throw new InvalidOperationException("Student is already enrolled in this course.");
             }
 
-            _db.Enrollments.Add(enrollment);
+            _db.Enrollments.Add(new Enrollment() { CourseId = enrollment.CourseId, StudentId = enrollment.StudentId });
 
             _db.SaveChanges();
         }

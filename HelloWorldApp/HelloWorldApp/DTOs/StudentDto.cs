@@ -6,5 +6,4 @@ public class StudentDto
     public string Name { get; set; } = string.Empty;
 
     public ICollection<StudentCourseDto>? Courses { get; set; }
-    public ICollection<GradeDto>? Grades { get; set; }
 }
