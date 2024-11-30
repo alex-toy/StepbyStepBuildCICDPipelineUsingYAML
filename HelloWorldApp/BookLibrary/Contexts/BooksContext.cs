@@ -1,4 +1,4 @@
-﻿using BookLibrary.Models;
+﻿using BookLibrary.Models.Librarys;
 using Microsoft.EntityFrameworkCore;
 
 namespace BookLibrary;

@@ -1,4 +1,4 @@
-﻿namespace BookLibrary.Models;
+﻿namespace BookLibrary.Models.Librarys;
 
 public class Book
 {

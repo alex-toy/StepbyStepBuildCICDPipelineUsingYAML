@@ -1,4 +1,4 @@
-﻿using BookLibrary.Models;
+﻿using BookLibrary.Models.Blogs;
 using Microsoft.EntityFrameworkCore;
 
 namespace BookLibrary.Contexts;

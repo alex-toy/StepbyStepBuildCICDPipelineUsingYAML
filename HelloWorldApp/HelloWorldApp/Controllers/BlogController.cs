@@ -1,5 +1,5 @@
 ﻿using BookLibrary.Contexts;
-using BookLibrary.Models;
+using BookLibrary.Models.Blogs;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -96,12 +96,27 @@ public class BlogController : ControllerBase
         }
     }
 
-    [HttpDelete("blogs")]
-    public void Delete(Post post)
+    [HttpDelete("blogs/{id}")]
+    public void DeleteBlog(int id)
     {
         try
         {
-            _db.Posts.Remove(post);
+            _db.Blogs.Remove(new Blog { Id = id });
+            _db.SaveChanges();
+        }
+        catch (System.Exception ex)
+        {
+            Console.WriteLine($"An error occurred while deleting a blog: {ex.Message}");
+            throw;
+        }
+    }
+
+    [HttpDelete("posts/{id}")]
+    public void Delete(int id)
+    {
+        try
+        {
+            _db.Posts.Remove(new Post { Id = id });
             _db.SaveChanges();
         }
         catch (System.Exception ex)
